@@ -81,7 +81,7 @@ def read_message():
     df = db.get_all_messages_for_user(current_identity['user_id'], only_unread=True, last_message=True)
     if len(df) > 0:
         db.commit_to_db(f'''
-        update messages set is_read = true where messages_id = {df.iloc[0]['messages_id'].replace("'", "''")}
+        update messages set is_read = true where messages_id = {df.iloc[0]['messages_id']}
         ''')
     data = df.to_dict('records')
     return jsonify({'data': data[0] if data else data})
@@ -97,7 +97,7 @@ def delete_message(message_id):
     df = db.query(f'''
     select *
     from messages
-    where messages_id = {message_id.replace("'", "''")}
+    where messages_id = {message_id}
     ''')
     user_id = current_identity['user_id']
     if len(df) > 0:
